@@ -1,18 +1,10 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/foundation.dart';
 import 'package:mobx/mobx.dart';
 part 'login_controller.g.dart';
 
 class LoginController = _LoginControllerBase with _$LoginController;
 
 abstract class _LoginControllerBase with Store {
-  _LoginControllerBase() {
-    autorun((_) {
-      debugPrint(isEmailvalid.toString());
-      debugPrint(isPasswordValid.toString());
-    });
-  }
-
   @observable
   String email = "";
 
@@ -43,6 +35,9 @@ abstract class _LoginControllerBase with Store {
   @observable
   bool loading = false;
 
+  @observable
+  bool loggedIn = false;
+
   @action
   Future<void> login() async {
     loading = true;
@@ -50,5 +45,6 @@ abstract class _LoginControllerBase with Store {
     await Future.delayed(const Duration(seconds: 2));
 
     loading = false;
+    loggedIn = true;
   }
 }

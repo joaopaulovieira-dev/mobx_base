@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:mobx_base/controllers/login_controller.dart';
 import 'package:mobx_base/widgets/custom_icon_button.dart';
 import 'package:mobx_base/widgets/custom_text_field.dart';
@@ -16,6 +17,35 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final LoginController controller = LoginController();
+
+  @override
+  void initState() {
+    super.initState();
+    //1º tipo de reação: autorun - executa sempre que houver alteração
+    // autorun((_) {
+    //   if (controller.loggedIn) {
+    //     Navigator.of(context).pushReplacement(
+    //       MaterialPageRoute(builder: (_) => const ListScreen()),
+    //     );
+    //   }
+    // });
+
+    //2º tipo de reação: reaction - executa quando houver alteração e quando a condição for verdadeira
+    // reaction((_) => controller.loggedIn, (loggedIn) {
+    //   if (loggedIn != null) {
+    //     Navigator.of(context).pushReplacement(
+    //       MaterialPageRoute(builder: (_) => const ListScreen()),
+    //     );
+    //   }
+    // });
+
+    //3º tipo de reação: when - executa quando a condição for verdadeira
+    when((_) => controller.loggedIn, () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const ListScreen()),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,15 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             )
                           : const Text('Login'),
-                      onPressed: controller.isFormValid
-                          ? () {
-                              controller.login();
-                              // Navigator.of(context).pushReplacement(
-                              //   MaterialPageRoute(
-                              //       builder: (_) => const ListScreen()),
-                              // );
-                            }
-                          : null,
+                      onPressed:
+                          controller.isFormValid ? controller.login : null,
                     );
                   })
                 ],

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx_base/controllers/list_controller.dart';
 import 'package:mobx_base/widgets/custom_icon_button.dart';
 import 'package:mobx_base/widgets/custom_text_field.dart';
 
@@ -12,6 +14,7 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
+  final ListController controller = ListController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -55,15 +58,17 @@ class _ListScreenState extends State<ListScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: <Widget>[
-                        CustomTextField(
-                          hint: 'Tarefa',
-                          onChanged: (todo) {},
-                          suffix: CustomIconButton(
-                            radius: 32,
-                            iconData: Icons.add,
-                            onTap: () {},
-                          ),
-                        ),
+                        Observer(builder: (_) {
+                          return CustomTextField(
+                            hint: 'Tarefa',
+                            onChanged: controller.setNewTodoTitle,
+                            suffix: CustomIconButton(
+                              radius: 32,
+                              iconData: Icons.add,
+                              onTap: controller.isFormValid ? () {} : null,
+                            ),
+                          );
+                        }),
                         const SizedBox(
                           height: 8,
                         ),

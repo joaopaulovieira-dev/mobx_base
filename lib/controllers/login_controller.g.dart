@@ -95,6 +95,22 @@ mixin _$LoginController on _LoginControllerBase, Store {
     });
   }
 
+  late final _$loggedInAtom =
+      Atom(name: '_LoginControllerBase.loggedIn', context: context);
+
+  @override
+  bool get loggedIn {
+    _$loggedInAtom.reportRead();
+    return super.loggedIn;
+  }
+
+  @override
+  set loggedIn(bool value) {
+    _$loggedInAtom.reportWrite(value, super.loggedIn, () {
+      super.loggedIn = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_LoginControllerBase.login', context: context);
 
@@ -146,6 +162,7 @@ email: ${email},
 password: ${password},
 passwordVisible: ${passwordVisible},
 loading: ${loading},
+loggedIn: ${loggedIn},
 isEmailvalid: ${isEmailvalid},
 isPasswordValid: ${isPasswordValid},
 isFormValid: ${isFormValid}
